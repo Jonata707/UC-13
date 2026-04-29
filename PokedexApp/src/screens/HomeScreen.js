@@ -103,7 +103,10 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ alignItems: 'center', width: '100%' }}
+      >
 
         {/* HEADER */}
         <View style={styles.header}>
@@ -173,6 +176,12 @@ export default function HomeScreen({ navigation }) {
             </View>
           </View>
         )}
+        <TouchableOpacity
+  onPress={() => navigation.navigate('Region', { generation: 1 })}
+  style={styles.Ger}
+>
+  <Text style={styles.textoGer}>Ver Gerações</Text>
+</TouchableOpacity>
 
         <StatusBar style="light" />
       </ScrollView>
@@ -191,6 +200,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
+    width: '100%',
+    alignItems: 'center',
   },
 
   titulo: {
@@ -212,10 +223,12 @@ const styles = StyleSheet.create({
 
   favButton: {
     backgroundColor: '#facc15',
-    padding: 12,
-    borderRadius: 10,
+    padding: 15,
+    borderRadius: 12,
     marginBottom: 15,
     alignItems: 'center',
+    width: '100%',
+    margin: 15
   },
 
   favText: {
@@ -225,16 +238,21 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: '#1e293b',
     color: '#fff',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
+    padding: 18,
+    borderRadius: 12,
+    marginBottom: 12,
+    width: '100%',
+    margin: 15
   },
 
   botao: {
     backgroundColor: '#3b82f6',
-    padding: 15,
-    borderRadius: 10,
+    padding: 18,
+    borderRadius: 12,
     alignItems: 'center',
+    width: '100%',
+    marginBottom: 10,
+    margin: 15
   },
 
   botaoTexto: {
@@ -245,11 +263,12 @@ const styles = StyleSheet.create({
   card: {
     marginTop: 20,
     backgroundColor: '#1e293b',
-    padding: 20,
+    padding: 25,
     borderRadius: 20,
     alignItems: 'center',
     position: 'relative',
     borderWidth: 2,
+    width: '100%',
   },
 
   favorito: {
@@ -282,8 +301,8 @@ const styles = StyleSheet.create({
   },
 
   tipoBox: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 20,
   },
 
@@ -292,4 +311,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: 'capitalize',
   },
+  Ger: {
+    backgroundColor: '#3b82f6',
+    padding: 18,
+    borderRadius: 12,
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 10,
+    margin: 15
+  },
+  textoGer:{
+    color: '#fff',
+    fontWeight: 'bold',
+  }
 });

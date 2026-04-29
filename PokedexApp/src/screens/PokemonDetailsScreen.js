@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { 
+  View, Text, Image, StyleSheet, 
+  TouchableOpacity, ActivityIndicator 
+} from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
@@ -28,47 +31,51 @@ export default function PokemonDetailsScreen() {
   const route = useRoute();
   const navigation = useNavigation();
 
-  const { pokemon } = route.params;
+  const { pokemon } = route.params || {};
 
   const [detalhes, setDetalhes] = useState(null);
-
   const [loading, setLoading] = useState(true);
-  
 
-  //Chama as informações adicionais
   useEffect(() => {
-    buscarDetalhes();
+    if (pokemon) {
+      buscarDetalhes();
+    }
   }, []);
 
   async function buscarDetalhes() {
     try {
-      // 1️⃣ Dados principais
-      const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon.nome}`);
-      
-      // 2️⃣ Dados da espécie (geração + descrição)
+      const response = await axios.get(
+        `https://pokeapi.co/api/v2/pokemon/${pokemon.nome}`
+      );
+
       const especie = await axios.get(response.data.species.url);
 
-      // descrição em português (se tiver)
       const descricao = especie.data.flavor_text_entries.find(
         item => item.language.name === 'pt' || item.language.name === 'en'
       );
-    //Puxa os dados adicionais: Peso , Geração, Descrição
+
       setDetalhes({
         peso: response.data.weight,
         geracao: especie.data.generation.name,
-        descricao: descricao?.flavor_text
+        descricao: descricao?.flavor_text?.replace(/\n|\f/g, ' ')
       });
 
     } catch (error) {
       console.log(error);
-    } 
-    //Carrega os dados
-    finally {
+    } finally {
       setLoading(false);
     }
   }
-  
-  //Se der certo, irá carregar em um container com as informações dentro do const Detalhes
+
+  // 🔒 segurança contra erro
+  if (!pokemon) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ color: '#fff' }}>Erro ao carregar Pokémon</Text>
+      </View>
+    );
+  }
+
   if (loading) {
     return (
       <View style={styles.container}>
@@ -76,39 +83,43 @@ export default function PokemonDetailsScreen() {
       </View>
     );
   }
-const tipoPrincipal = pokemon.tipos[0];
-const corFundo = coresPorTipo[tipoPrincipal] || '#0f172a';
+
+  // 🎨 cor dinâmica pelo tipo
+  const tipoPrincipal = pokemon.tipos?.[0];
+  const corFundo = coresPorTipo[tipoPrincipal] || '#1e293b';
+
   return (
     <View style={styles.container}>
-     <TouchableOpacity onPress={() => navigation.goBack()}>
+
+      <TouchableOpacity onPress={() => navigation.goBack()}>
         <Text style={styles.voltar}>← Voltar</Text>
       </TouchableOpacity>
 
-     <View style={[styles.containerTwo, { backgroundColor: corFundo }]}>
-      
+      <View style={[styles.card, { backgroundColor: corFundo }]}>
 
-      <Text style={styles.nome}>{pokemon.nome}</Text>
+        <Text style={styles.nome}>{pokemon.nome}</Text>
 
-      <Image
-        source={{ uri: pokemon.imagem }}
-        style={styles.imagem}
-      />
+        <Image
+          source={{ uri: pokemon.imagem }}
+          style={styles.imagem}
+        />
 
-      <Text style={styles.info}>
-        Tipos: {pokemon.tipos.join(', ')}
-      </Text>
-
-      <Text style={styles.info}>
-        Peso: {detalhes.peso / 10} kg
-      </Text>
-
-      <Text style={styles.info}>
-        Geração: {detalhes.geracao}
-      </Text>
-
-      <Text style={styles.descricao}>
-        {detalhes.descricao}
+        <Text style={styles.info}>
+          Tipos: {pokemon.tipos.join(', ')}
         </Text>
+
+        <Text style={styles.info}>
+          ⚖️ Peso: {detalhes.peso / 10} kg
+        </Text>
+
+        <Text style={styles.info}>
+          🌎 Geração: {detalhes.geracao}
+        </Text>
+
+        <Text style={styles.descricao}>
+          {detalhes.descricao}
+        </Text>
+
       </View>
     </View>
   );
@@ -124,6 +135,15 @@ const styles = StyleSheet.create({
   voltar: {
     color: '#38bdf8',
     marginBottom: 10,
+    fontSize: 16,
+  },
+
+  card: {
+    flex: 1,
+    borderRadius: 20,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   nome: {
@@ -131,32 +151,26 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     textTransform: 'capitalize',
-    textAlign: 'center',
+    marginBottom: 10,
   },
 
   imagem: {
-    width: 200,
-    height: 200,
-    alignSelf: 'center',
-    marginVertical: 20,
+    width: 180,
+    height: 180,
+    marginVertical: 15,
   },
 
   info: {
-    color: 'black',
-    fontSize: 18,
-    textAlign: 'center',
+    color: '#000',
+    fontSize: 16,
     marginTop: 5,
+    textAlign: 'center',
   },
 
   descricao: {
-    color: 'black',
-    marginTop: 20,
+    color: '#000',
+    marginTop: 15,
     textAlign: 'center',
+    fontSize: 14,
   },
-  containerTwo:{
-    width: 500,
-    marginLeft: 440,
-    padding: 20,
-    borderRadius: 20
-  }
 });
