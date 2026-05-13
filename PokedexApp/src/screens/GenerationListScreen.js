@@ -99,9 +99,16 @@ export default function GenerationListScreen() {
   }
 
   return (
+    
     <View style={styles.container}>
+<TouchableOpacity
+                style={styles.botaoVoltar}
+                onPress={() => navigation.goBack()}
+              >
+                <Text style={styles.textoVoltar}>← Voltar</Text>
+              </TouchableOpacity>
       <Text style={styles.title}>📍 {nome}</Text>
-
+       
       <FlatList
         data={pokemons}
         keyExtractor={(item) => item.nome}
@@ -117,8 +124,12 @@ export default function GenerationListScreen() {
                 navigation.navigate('PokemonDetails', {
                   pokemon: item
                 })
+                
               }
+              
             >
+                
+                
               <Image
                 source={{ uri: item.imagem }}
                 style={styles.imagem}
@@ -178,5 +189,13 @@ const styles = StyleSheet.create({
     color: '#000',
     textTransform: 'capitalize',
     fontSize: 12,
+  },
+  botaoVoltar: {
+    marginBottom: 10,
+  },
+  textoVoltar: {
+    color: '#38bdf8',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

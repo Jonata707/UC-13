@@ -8,6 +8,7 @@ import FavoritesScreen from '../screens/FavoritesScreen';
 import PokemonDetailsScreen from '../screens/PokemonDetailsScreen';
 import RegionScreen from '../screens/RegionScreen';
 import GenerationListScreen from '../screens/GenerationListScreen';
+import QuizScreen from '../screens/QuizScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,7 @@ export default function Routes() {
             />
             <Stack.Screen name="Region" component={RegionScreen} />
             <Stack.Screen name="GenerationList" component={GenerationListScreen} />
+            <Stack.Screen name="Quiz" component={QuizScreen} />
           </>
         ) : (
           <Stack.Screen name="Login" component={LoginScreen} />

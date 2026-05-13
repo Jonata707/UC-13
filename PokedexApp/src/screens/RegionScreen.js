@@ -57,7 +57,15 @@ export default function RegionScreen() {
 
   return (
     <View style={styles.container}>
+
+        <TouchableOpacity
+              style={styles.botaoVoltar}
+              onPress={() => navigation.goBack()}
+            >
+              <Text style={styles.textoVoltar}>← Voltar</Text>
+            </TouchableOpacity>
       <Text style={styles.title}>🌎 Escolha uma Região</Text>
+    
 
       <FlatList
         data={geracoes}
@@ -112,5 +120,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginTop: 10,
     fontSize: 18,
+  },
+  botaoVoltar: {
+    marginBottom: 10,
+  },
+  textoVoltar: {
+    color: '#38bdf8',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
